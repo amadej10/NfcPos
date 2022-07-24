@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,13 @@ using NfcPos.Application.Users.Commands.Queries.GetUsers;
 namespace NfcPos.WebUI.Controllers;
 public class UsersController : ApiControllerBase
 {
+
+    [HttpGet("GetUsers")]
+    public async Task<ActionResult<UsersVm>> GetUsers()
+    {
+        return await Mediator.Send(new GetUsersQuery());
+    }
+
 
     [HttpPost("CreateUser")]
     public async Task<ActionResult<int>> CreateUser(CreateUserCommand command)
