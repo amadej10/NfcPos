@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { WeatherForecast, WeatherForecastClient } from '../web-api-client';
 
 @Component({
   selector: 'app-tab1',
@@ -7,6 +8,12 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  public forecasts: WeatherForecast[] = [];
+
+  constructor(private client: WeatherForecastClient) {
+    client.get().subscribe(result => {
+      this.forecasts = result;
+    }, error => console.error(error));
+  }
 
 }
