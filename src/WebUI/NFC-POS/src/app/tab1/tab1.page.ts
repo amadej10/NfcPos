@@ -11,9 +11,12 @@ export class Tab1Page {
   public forecasts: WeatherForecast[] = [];
 
   constructor(private client: WeatherForecastClient) {
-    client.get().subscribe(result => {
+    
+  }
+
+  getData(){
+    this.client.get().subscribe(result => {
       this.forecasts = result;
     }, error => console.error(error));
   }
-
 }

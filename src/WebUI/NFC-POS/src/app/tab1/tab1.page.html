@@ -7,13 +7,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+ 
 
   <p>This component demonstrates fetching data from the server.</p>
 
@@ -37,4 +31,6 @@
       </tr>
     </tbody>
   </table>
+  <!-- <button onclick="getData()">Get Data</button> -->
+  <ion-button (click)="getData()" >Get Data</ion-button>
 </ion-content>
