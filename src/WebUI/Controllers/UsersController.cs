@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NfcPos.Application.Users.Commands.CreateUser;
+using NfcPos.Application.Users.Commands.Queries.GetUser;
 using NfcPos.Application.Users.Commands.Queries.GetUsers;
 
 namespace NfcPos.WebUI.Controllers;
@@ -15,6 +16,12 @@ public class UsersController : ApiControllerBase
     public async Task<ActionResult<UsersVm>> GetUsers()
     {
         return await Mediator.Send(new GetUsersQuery());
+    }
+
+    [HttpGet("GetUser")]
+    public async Task<ActionResult<UserVm>> GetUser([FromQuery] GetUserQuery query)
+    {
+        return await Mediator.Send(query);
     }
 
 

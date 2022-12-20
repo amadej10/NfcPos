@@ -17,6 +17,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IUsersClient {
     getUsers(): Observable<UsersVm>;
+    getUser(nfcId: string | null | undefined): Observable<UserVm>;
     createUser(command: CreateUserCommand): Observable<number>;
 }
 
@@ -71,6 +72,56 @@ export class UsersClient implements IUsersClient {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = UsersVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getUser(nfcId: string | null | undefined): Observable<UserVm> {
+        let url_ = this.baseUrl + "/api/Users/GetUser?";
+        if (nfcId !== undefined && nfcId !== null)
+            url_ += "nfcId=" + encodeURIComponent("" + nfcId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetUser(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UserVm>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UserVm>;
+        }));
+    }
+
+    protected processGetUser(response: HttpResponseBase): Observable<UserVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserVm.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -257,6 +308,7 @@ export class UserDto implements IUserDto {
     nfcId?: string;
     name?: string;
     surname?: string;
+    description?: string | undefined;
     balance?: number;
 
     constructor(data?: IUserDto) {
@@ -274,6 +326,7 @@ export class UserDto implements IUserDto {
             this.nfcId = _data["nfcId"];
             this.name = _data["name"];
             this.surname = _data["surname"];
+            this.description = _data["description"];
             this.balance = _data["balance"];
         }
     }
@@ -291,6 +344,7 @@ export class UserDto implements IUserDto {
         data["nfcId"] = this.nfcId;
         data["name"] = this.name;
         data["surname"] = this.surname;
+        data["description"] = this.description;
         data["balance"] = this.balance;
         return data;
     }
@@ -301,7 +355,44 @@ export interface IUserDto {
     nfcId?: string;
     name?: string;
     surname?: string;
+    description?: string | undefined;
     balance?: number;
+}
+
+export class UserVm implements IUserVm {
+    user?: UserDto;
+
+    constructor(data?: IUserVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.user = _data["user"] ? UserDto.fromJS(_data["user"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UserVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IUserVm {
+    user?: UserDto;
 }
 
 export class CreateUserCommand implements ICreateUserCommand {
