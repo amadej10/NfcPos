@@ -9,17 +9,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NfcPos.Application.Common.Exceptions;
 using NfcPos.Application.Common.Interfaces;
+using NfcPos.Application.Operations.Commands.Common;
 using NfcPos.Domain.Entities;
 
 namespace NfcPos.Application.Operations.Commands.TopUp;
-public class TopUpCommand : IRequest<TopUpVm>
+public class TopUpCommand : IRequest<BalanceVm>
 {
     public string nfcId { get; set; }
     public decimal TopUpAmount { get; set; } = 0m;
 
 }
 
-public class TopUpCommandHandler : IRequestHandler<TopUpCommand, TopUpVm>
+public class TopUpCommandHandler : IRequestHandler<TopUpCommand, BalanceVm>
 {
 
     private readonly IApplicationDbContext _context;
@@ -33,7 +34,7 @@ public class TopUpCommandHandler : IRequestHandler<TopUpCommand, TopUpVm>
         _mapper = mapper;
     }
 
-    public async Task<TopUpVm> Handle(TopUpCommand request, CancellationToken cancellationToken)
+    public async Task<BalanceVm> Handle(TopUpCommand request, CancellationToken cancellationToken)
     {
         var user = await _context.Users
            .Where(x => x.NfcId == request.nfcId)
@@ -51,7 +52,7 @@ public class TopUpCommandHandler : IRequestHandler<TopUpCommand, TopUpVm>
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new TopUpVm
+        return new BalanceVm
         {
             OldBalance = oldBalance,
             NewBalance = user.Balance
