@@ -15,6 +15,76 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IOperationsClient {
+    topUp(command: TopUpCommand): Observable<TopUpVm>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class OperationsClient implements IOperationsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    topUp(command: TopUpCommand): Observable<TopUpVm> {
+        let url_ = this.baseUrl + "/api/Operations/TopUp";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processTopUp(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTopUp(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TopUpVm>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TopUpVm>;
+        }));
+    }
+
+    protected processTopUp(response: HttpResponseBase): Observable<TopUpVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TopUpVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IUsersClient {
     getUsers(): Observable<UsersVm>;
     getUser(nfcId: string | null | undefined): Observable<UserVm>;
@@ -257,6 +327,86 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         }
         return _observableOf(null as any);
     }
+}
+
+export class TopUpVm implements ITopUpVm {
+    oldBalance?: number;
+    newBalance?: number;
+
+    constructor(data?: ITopUpVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.oldBalance = _data["oldBalance"];
+            this.newBalance = _data["newBalance"];
+        }
+    }
+
+    static fromJS(data: any): TopUpVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new TopUpVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["oldBalance"] = this.oldBalance;
+        data["newBalance"] = this.newBalance;
+        return data;
+    }
+}
+
+export interface ITopUpVm {
+    oldBalance?: number;
+    newBalance?: number;
+}
+
+export class TopUpCommand implements ITopUpCommand {
+    nfcId?: string;
+    topUpAmount?: number;
+
+    constructor(data?: ITopUpCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nfcId = _data["nfcId"];
+            this.topUpAmount = _data["topUpAmount"];
+        }
+    }
+
+    static fromJS(data: any): TopUpCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new TopUpCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nfcId"] = this.nfcId;
+        data["topUpAmount"] = this.topUpAmount;
+        return data;
+    }
+}
+
+export interface ITopUpCommand {
+    nfcId?: string;
+    topUpAmount?: number;
 }
 
 export class UsersVm implements IUsersVm {

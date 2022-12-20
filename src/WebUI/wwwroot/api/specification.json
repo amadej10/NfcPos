@@ -6,6 +6,38 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Operations/TopUp": {
+      "post": {
+        "tags": [
+          "Operations"
+        ],
+        "operationId": "Operations_TopUp",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopUpCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopUpVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/GetUsers": {
       "get": {
         "tags": [
@@ -116,6 +148,33 @@
   },
   "components": {
     "schemas": {
+      "TopUpVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "oldBalance": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "newBalance": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "TopUpCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nfcId": {
+            "type": "string"
+          },
+          "topUpAmount": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
       "UsersVm": {
         "type": "object",
         "additionalProperties": false,
