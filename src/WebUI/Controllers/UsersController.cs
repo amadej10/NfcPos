@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NfcPos.Application.Users.Commands.CreateUser;
-using NfcPos.Application.Users.Commands.Queries.GetUser;
-using NfcPos.Application.Users.Commands.Queries.GetUsers;
+using NfcPos.Application.Users.Queries.GetUser;
+using NfcPos.Application.Users.Queries.GetUsers;
 
 namespace NfcPos.WebUI.Controllers;
 public class UsersController : ApiControllerBase

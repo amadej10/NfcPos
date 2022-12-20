@@ -8,9 +8,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NfcPos.Application.Common.Interfaces;
-using NfcPos.Application.Users.Commands.Queries.Common;
+using NfcPos.Application.Users.Queries.Common;
 
-namespace NfcPos.Application.Users.Commands.Queries.GetUser;
+namespace NfcPos.Application.Users.Queries.GetUser;
 public class GetUserQuery : IRequest<UserVm>
 {
     public string nfcId { get; set; }

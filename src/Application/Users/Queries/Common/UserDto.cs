@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NfcPos.Application.Common.Mappings;
 using NfcPos.Domain.Entities;
 
-namespace NfcPos.Application.Users.Commands.Queries.Common;
+namespace NfcPos.Application.Users.Queries.Common;
 public class UserDto : IMapFrom<User>
 {
     public int Id { get; set; }
