@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NfcPos.Application.Common.Exceptions;
@@ -25,13 +19,11 @@ public class TopUpCommandHandler : IRequestHandler<TopUpCommand, BalanceVm>
 
     private readonly IApplicationDbContext _context;
     private readonly ILogger<TopUpCommandHandler> _logger;
-    private readonly IMapper _mapper;
 
-    public TopUpCommandHandler(IApplicationDbContext context, ILogger<TopUpCommandHandler> logger, IMapper mapper)
+    public TopUpCommandHandler(IApplicationDbContext context, ILogger<TopUpCommandHandler> logger)
     {
         _context = context;
         _logger = logger;
-        _mapper = mapper;
     }
 
     public async Task<BalanceVm> Handle(TopUpCommand request, CancellationToken cancellationToken)

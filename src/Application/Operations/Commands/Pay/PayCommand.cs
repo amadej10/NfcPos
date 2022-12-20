@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NfcPos.Application.Common.Exceptions;
@@ -26,14 +20,12 @@ public class PayCommandHandler : IRequestHandler<PayCommand, BalanceVm>
 
     private readonly IApplicationDbContext _context;
     private readonly ILogger<PayCommandHandler> _logger;
-    private readonly IMapper _mapper;
 
 
-    public PayCommandHandler(IApplicationDbContext context, ILogger<PayCommandHandler> logger, IMapper mapper)
+    public PayCommandHandler(IApplicationDbContext context, ILogger<PayCommandHandler> logger)
     {
         _context = context;
         _logger = logger;
-        _mapper = mapper;
     }
 
     public async Task<BalanceVm> Handle(PayCommand request, CancellationToken cancellationToken)
