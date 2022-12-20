@@ -19,7 +19,7 @@ import { API_BASE_URL } from './web-api-client';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: API_BASE_URL, useValue: 'http://192.168.50.65:5000' }
+    { provide: API_BASE_URL, useValue: 'http://localhost:5000' }
   ],
   bootstrap: [AppComponent],
 })
