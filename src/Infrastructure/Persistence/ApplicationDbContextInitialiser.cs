@@ -47,8 +47,28 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
-       
-       
-       
+
+        _context.Users.Add(new Domain.Entities.User()
+        {
+            Name = "Amadej",
+            Surname = "Skornšek",
+            Description = "Testni user",
+            Balance = 100.5m,
+            NfcId = "ABC123"
+
+        });
+
+        _context.Users.Add(new Domain.Entities.User()
+        {
+            Name = "Blanka",
+            Surname = "Kroflič",
+            Description = "Testni user",
+            Balance = 130.1m,
+            NfcId = "ABC111"
+
+        });
+
+        await _context.SaveChangesAsync();
+
     }
 }
