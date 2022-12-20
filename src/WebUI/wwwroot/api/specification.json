@@ -70,6 +70,38 @@
         }
       }
     },
+    "/api/Operations/WithdrawAll": {
+      "post": {
+        "tags": [
+          "Operations"
+        ],
+        "operationId": "Operations_WithdrawAll",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawAllCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/GetUsers": {
       "get": {
         "tags": [
@@ -217,6 +249,15 @@
           "totalPayAmount": {
             "type": "number",
             "format": "decimal"
+          }
+        }
+      },
+      "WithdrawAllCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nfcId": {
+            "type": "string"
           }
         }
       },
