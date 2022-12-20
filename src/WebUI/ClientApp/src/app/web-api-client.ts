@@ -16,7 +16,8 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IOperationsClient {
-    topUp(command: TopUpCommand): Observable<TopUpVm>;
+    topUp(command: TopUpCommand): Observable<BalanceVm>;
+    pay(command: PayCommand): Observable<BalanceVm>;
 }
 
 @Injectable({
@@ -32,7 +33,7 @@ export class OperationsClient implements IOperationsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    topUp(command: TopUpCommand): Observable<TopUpVm> {
+    topUp(command: TopUpCommand): Observable<BalanceVm> {
         let url_ = this.baseUrl + "/api/Operations/TopUp";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -55,14 +56,14 @@ export class OperationsClient implements IOperationsClient {
                 try {
                     return this.processTopUp(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TopUpVm>;
+                    return _observableThrow(e) as any as Observable<BalanceVm>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TopUpVm>;
+                return _observableThrow(response_) as any as Observable<BalanceVm>;
         }));
     }
 
-    protected processTopUp(response: HttpResponseBase): Observable<TopUpVm> {
+    protected processTopUp(response: HttpResponseBase): Observable<BalanceVm> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -73,7 +74,59 @@ export class OperationsClient implements IOperationsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TopUpVm.fromJS(resultData200);
+            result200 = BalanceVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    pay(command: PayCommand): Observable<BalanceVm> {
+        let url_ = this.baseUrl + "/api/Operations/Pay";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPay(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPay(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BalanceVm>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BalanceVm>;
+        }));
+    }
+
+    protected processPay(response: HttpResponseBase): Observable<BalanceVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BalanceVm.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -329,11 +382,11 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
-export class TopUpVm implements ITopUpVm {
+export class BalanceVm implements IBalanceVm {
     oldBalance?: number;
     newBalance?: number;
 
-    constructor(data?: ITopUpVm) {
+    constructor(data?: IBalanceVm) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -349,9 +402,9 @@ export class TopUpVm implements ITopUpVm {
         }
     }
 
-    static fromJS(data: any): TopUpVm {
+    static fromJS(data: any): BalanceVm {
         data = typeof data === 'object' ? data : {};
-        let result = new TopUpVm();
+        let result = new BalanceVm();
         result.init(data);
         return result;
     }
@@ -364,7 +417,7 @@ export class TopUpVm implements ITopUpVm {
     }
 }
 
-export interface ITopUpVm {
+export interface IBalanceVm {
     oldBalance?: number;
     newBalance?: number;
 }
@@ -407,6 +460,46 @@ export class TopUpCommand implements ITopUpCommand {
 export interface ITopUpCommand {
     nfcId?: string;
     topUpAmount?: number;
+}
+
+export class PayCommand implements IPayCommand {
+    nfcId?: string;
+    totalPayAmount?: number;
+
+    constructor(data?: IPayCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nfcId = _data["nfcId"];
+            this.totalPayAmount = _data["totalPayAmount"];
+        }
+    }
+
+    static fromJS(data: any): PayCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new PayCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nfcId"] = this.nfcId;
+        data["totalPayAmount"] = this.totalPayAmount;
+        return data;
+    }
+}
+
+export interface IPayCommand {
+    nfcId?: string;
+    totalPayAmount?: number;
 }
 
 export class UsersVm implements IUsersVm {

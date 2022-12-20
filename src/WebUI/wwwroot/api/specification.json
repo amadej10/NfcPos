@@ -30,7 +30,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TopUpVm"
+                  "$ref": "#/components/schemas/BalanceVm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Operations/Pay": {
+      "post": {
+        "tags": [
+          "Operations"
+        ],
+        "operationId": "Operations_Pay",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceVm"
                 }
               }
             }
@@ -148,7 +180,7 @@
   },
   "components": {
     "schemas": {
-      "TopUpVm": {
+      "BalanceVm": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -170,6 +202,19 @@
             "type": "string"
           },
           "topUpAmount": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "PayCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nfcId": {
+            "type": "string"
+          },
+          "totalPayAmount": {
             "type": "number",
             "format": "decimal"
           }
