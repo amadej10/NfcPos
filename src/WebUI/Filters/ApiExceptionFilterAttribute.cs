@@ -16,6 +16,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             {
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
+                { typeof(InsufficientFundsException), HandleInsufficientFundsException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
             };
@@ -78,6 +79,23 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         {
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
             Title = "The specified resource was not found.",
+            Detail = exception.Message
+        };
+
+        context.Result = new NotFoundObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleInsufficientFundsException(ExceptionContext context)
+    {
+        var exception = (InsufficientFundsException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Title = "User Has Insufficient Funds.",
             Detail = exception.Message
         };
 
