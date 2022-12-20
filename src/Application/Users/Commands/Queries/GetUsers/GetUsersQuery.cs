@@ -8,6 +8,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NfcPos.Application.Common.Interfaces;
+using NfcPos.Application.Users.Commands.Queries.Common;
 
 namespace NfcPos.Application.Users.Commands.Queries.GetUsers;
 public record GetUsersQuery : IRequest<UsersVm>;
