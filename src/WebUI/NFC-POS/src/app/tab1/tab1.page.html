@@ -1,36 +1,59 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      User Management
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
  
+  <ion-list lines="full">
+    <ion-list-header>
+      <ion-label>Users</ion-label>
+      <ion-button id="open-modal">Add User</ion-button>
+    </ion-list-header>
+    <div *ngIf="usersData$ | async as usersVm">
+      <ion-item *ngFor="let user of usersVm.users">
+        <ion-label>{{ user.name }} {{ user.surname }}</ion-label>
+      </ion-item>
+    </div>
+  </ion-list>
 
-  <p>This component demonstrates fetching data from the server.</p>
+  
+  <ion-button (click)="getUsersData()" >Get Data</ion-button>
 
-  <p *ngIf="!forecasts"><em>Loading...</em></p>
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Add new user</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-input type="text" placeholder="Tag" [(ngModel)]="tag"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="text" placeholder="Name" [(ngModel)]="name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="text" placeholder="Surname" [(ngModel)]="surname"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="text" placeholder="Description" [(ngModel)]="description"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="number" placeholder="First top up balance" [(ngModel)]="balance"></ion-input>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
-  <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="forecasts">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Temp. (C)</th>
-        <th>Temp. (F)</th>
-        <th>Summary</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let forecast of forecasts">
-        <td>{{ forecast.date }}</td>
-        <td>{{ forecast.temperatureC }}</td>
-        <td>{{ forecast.temperatureF }}</td>
-        <td>{{ forecast.summary }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <!-- <button onclick="getData()">Get Data</button> -->
-  <ion-button (click)="getData()" >Get Data</ion-button>
 </ion-content>
