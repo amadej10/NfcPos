@@ -5,22 +5,30 @@
     "iisExpress": {
       "applicationUrl": "http://0.0.0.0:61846",
       "sslPort": 44312
-    }
-  },
-  "profiles": {
-    "NfcPos.WebUI": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "applicationUrl": "http://0.0.0.0:5000",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+    "profiles": {
+      "NfcPos.WebUI": {
+        "commandName": "Project",
+        "launchBrowser": true,
+        "applicationUrl": "http://0.0.0.0:5000",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      },
+      "IIS Express": {
+        "commandName": "IISExpress",
+        "launchBrowser": true,
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      },
+      "Docker": {
+        "commandName": "Docker",
+        "launchBrowser": true,
+        "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+        "publishAllPorts": true,
+        "useSSL": true
       }
     }
   }
