@@ -4,7 +4,7 @@ import { OverlayEventDetail } from '@ionic/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CreateUserCommand, UsersClient, UsersVm, WeatherForecast, WeatherForecastClient } from '../web-api-client';
-// import { NFC, Ndef, NfcTag } from '@awesome-cordova-plugins/nfc/ngx';
+import { NFC, Ndef, NfcTag } from '@awesome-cordova-plugins/nfc/ngx';
 
 @Component({
   selector: 'app-tab1',
@@ -23,21 +23,20 @@ export class Tab1Page implements OnInit {
   balance: number;
   tag: string;
 
-  // private nfc: NFC, private ndef: Ndef
-  constructor(private userClient: UsersClient,) {
+  constructor(private userClient: UsersClient,private nfc: NFC, private ndef: Ndef) {
 
   }
   ngOnInit(): void {
     this.getUsersData();
 
-    // let flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
-    // this.readerMode$ = this.nfc.readerMode(flags).subscribe(
-    //   tag => {
-    //     this.tag = JSON.stringify(tag);
-    //     console.log(tag);
-    //   },
-    //   err => console.log('Error reading tag', err)
-    // );
+    let flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
+    this.readerMode$ = this.nfc.readerMode(flags).subscribe(
+      tag => {
+        this.tag = JSON.stringify(tag);
+        console.log(tag);
+      },
+      err => console.log('Error reading tag', err)
+    );
   }
 
 
