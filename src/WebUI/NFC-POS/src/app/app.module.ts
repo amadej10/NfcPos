@@ -19,7 +19,7 @@ import { API_BASE_URL } from './web-api-client';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: API_BASE_URL, useValue: 'http://localhost:5000' }
+    { provide: API_BASE_URL, useValue: 'https://nfc-pos-api.skornsek.si' }
   ],
   bootstrap: [AppComponent],
 })
