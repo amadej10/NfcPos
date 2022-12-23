@@ -51,7 +51,8 @@ export class Tab1Page implements OnInit {
       name: this.name,
       surname: this.surname,
       description: this.description,
-      balance: this.balance
+      balance: this.balance,
+      nfcId: this.nfcId
     })).subscribe((result) => {
       console.log("user id:", result)
       this.modal.dismiss(null, 'confirm');
