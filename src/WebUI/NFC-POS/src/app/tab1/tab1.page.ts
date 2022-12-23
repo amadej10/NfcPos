@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
 import { Observable } from 'rxjs';
@@ -23,20 +23,13 @@ export class Tab1Page implements OnInit {
   balance: number;
   tag: string;
 
-  constructor(private userClient: UsersClient,private nfc: NFC, private ndef: Ndef) {
+  constructor(private userClient: UsersClient, private nfc: NFC, private ndef: Ndef, private ngZone: NgZone) {
 
   }
   ngOnInit(): void {
     this.getUsersData();
+    this.nfcGetId();
 
-    let flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
-    this.readerMode$ = this.nfc.readerMode(flags).subscribe(
-      tag => {
-        this.tag = JSON.stringify(tag);
-        console.log(tag);
-      },
-      err => console.log('Error reading tag', err)
-    );
   }
 
 
@@ -70,5 +63,36 @@ export class Tab1Page implements OnInit {
     if (ev.detail.role === 'confirm') {
       this.getUsersData();
     }
+    this.readerMode$ = null;
+    this.clearInputData();
+  }
+
+  nfcGetId() {
+    let flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
+    this.readerMode$ = this.nfc.readerMode(flags).subscribe(
+      tag => {
+        this.ngZone.run(() => {
+          this.tag = this.nfc.bytesToHexString(tag.id);
+          console.log(this.tag, tag);
+        })
+
+      },
+      err => console.log('Error reading tag', err)
+    );
+  }
+
+  willPresent(event: Event) {
+    console.log("Before present");
+    
+  }
+
+  clearInputData() {
+    this.ngZone.run(() => {
+      this.name = "";
+      this.surname = "";
+      this.tag = "";
+      this.description = "";
+      this.balance = undefined;
+    })
   }
 }
