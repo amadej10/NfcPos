@@ -7,14 +7,34 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- <ion-button (click)="getNfcId()">Get NFC</ion-button> -->
+  <ion-row *ngIf="!nfcId" class="ion-align-items-center" style="height: 100%;">
+    <ion-col>
+      <div class="ion-text-center">Scan NFC tag to start</div>
+    </ion-col>
+  </ion-row>
 
-  <ion-button (click)="getNfcId()">Get NFC</ion-button>
-  <app-explore-container name="Tab 2 page">
+  <div *ngIf="nfcId">
+    <div *ngIf="user$ | async as userVm">
+      <span *ngIf="userVm.user as user">
+        {{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance}}
+      </span>
+    </div>
+  </div>
 
-  </app-explore-container>
+  <ion-list>
+    <ion-item *ngFor="let menuItem of menuItems">
+      <ion-grid>
+        <ion-row class="ion-justify-content-between">
+          <ion-col>{{menuItem.name}}</ion-col>
+          <ion-col>{{menuItem.price}} €</ion-col>
+          <ion-col>Items: {{counter[menuItem.id]}}</ion-col>
+          <ion-col><ion-button size="large" expand="full" (click)="addItem(menuItem.id)">+</ion-button></ion-col>
+          <ion-col><ion-button size="large" expand="full" (click)="subtractItem(menuItem.id)">-</ion-button></ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+  TOTAL: {{total}} €
+  <ion-button size="large" expand="full" (click)="pay()">Pay</ion-button>
 </ion-content>
