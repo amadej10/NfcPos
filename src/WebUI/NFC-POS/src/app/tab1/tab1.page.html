@@ -15,7 +15,7 @@
     </ion-list-header>
     <div *ngIf="usersData$ | async as usersVm">
       <ion-item *ngFor="let user of usersVm.users">
-        <ion-label>{{ user.name }} {{ user.surname }}</ion-label>
+        <ion-label>{{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance}}</ion-label>
       </ion-item>
     </div>
   </ion-list>
