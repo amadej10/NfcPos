@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Ndef, NFC } from '@awesome-cordova-plugins/nfc/ngx';
+import { NfcService } from '../services/nfc.service';
 
 @Component({
   selector: 'app-tab2',
@@ -7,14 +7,17 @@ import { Ndef, NFC } from '@awesome-cordova-plugins/nfc/ngx';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
-  readerMode$;
 
-  constructor(private nfc: NFC, private ndef: Ndef) {
-    let flags = this.nfc.FLAG_READER_NFC_A | this.nfc.FLAG_READER_NFC_V;
-    this.readerMode$ = this.nfc.readerMode(flags).subscribe(
-      tag => console.log(JSON.stringify(tag)),
-      err => console.log('Error reading tag', err)
-    );
+  nfcId: string;
+  constructor(private nfcService: NfcService) {
+    nfcService.getId().subscribe((nfcId) => {
+      this.nfcId=nfcId;
+      console.log(nfcId, this.nfcId)
+    })
+  }
+
+  getNfcId() {
+    console.log(this.nfcId)
   }
 
 }

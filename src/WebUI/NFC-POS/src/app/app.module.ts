@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { API_BASE_URL } from './web-api-client';
 import { NFC, Ndef } from '@awesome-cordova-plugins/nfc/ngx';
+import { NfcService } from './services/nfc.service';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { NFC, Ndef } from '@awesome-cordova-plugins/nfc/ngx';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: API_BASE_URL, useValue: 'https://nfc-pos-api.skornsek.si' },
     NFC,
-    Ndef
+    Ndef,
+    NfcService
   ],
   bootstrap: [AppComponent],
 })

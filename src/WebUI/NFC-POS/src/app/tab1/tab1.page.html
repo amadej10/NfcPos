@@ -37,10 +37,10 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <div *ngIf="tag">
+        <div *ngIf="nfcId">
           <ion-item>
             <ion-label position="stacked">NFC ID</ion-label>
-            <ion-input type="text" [(ngModel)]="tag" disabled="true"></ion-input>
+            <ion-input type="text" [(ngModel)]="nfcId" disabled="true"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position="stacked">Name</ion-label>
@@ -59,7 +59,7 @@
             <ion-input type="number"  [(ngModel)]="balance"></ion-input>
           </ion-item>
         </div>
-        <ion-row *ngIf="!tag" class="ion-align-items-center" style="height: 100%;">
+        <ion-row *ngIf="!nfcId" class="ion-align-items-center" style="height: 100%;">
           <ion-col>
             <div class="ion-text-center">Scan NFC tag to add a new user</div>
           </ion-col>
