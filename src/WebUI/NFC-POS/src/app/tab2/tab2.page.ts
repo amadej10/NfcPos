@@ -36,7 +36,13 @@ export class Tab2Page {
   counter: any = {}
   total: number;
 
-  constructor(private nfcService: NfcService, private userClient: UsersClient, private operationsClient: OperationsClient, private toastController: ToastController, private ngZone: NgZone) {
+  constructor(
+    private nfcService: NfcService,
+    private userClient: UsersClient,
+    private operationsClient: OperationsClient,
+    private toastController: ToastController,
+    private ngZone: NgZone
+  ) {
     this.menuItems.push(new MenuItem(1, 3, "Beer"));
     this.menuItems.push(new MenuItem(2, 3.5, "Wine"));
     this.menuItems.push(new MenuItem(3, 3.2, "Beer 2"));
