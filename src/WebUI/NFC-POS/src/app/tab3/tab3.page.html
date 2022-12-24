@@ -1,17 +1,29 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Top Up
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-row *ngIf="!nfcId" class="ion-align-items-center" style="height: 100%;">
+    <ion-col>
+      <div class="ion-text-center">Scan NFC tag to start</div>
+    </ion-col>
+  </ion-row>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <div *ngIf="nfcId">
+    <div *ngIf="user$ | async as userVm">
+      <span *ngIf="userVm.user as user">
+        {{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance}}
+      </span>
+    </div>
+    <ion-item>
+      <ion-label position="stacked">Top UP Amount</ion-label>
+      <ion-input type="number" [(ngModel)]="topUpAmount"></ion-input>
+    </ion-item>
+    <ion-button size="large" expand="full" (click)="topUp()">Top Up</ion-button>
+
+  </div>
 </ion-content>
