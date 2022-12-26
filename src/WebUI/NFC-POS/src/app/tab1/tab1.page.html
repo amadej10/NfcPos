@@ -3,6 +3,9 @@
     <ion-title>
       User Management
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button id="open-modal">Add User</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -10,12 +13,24 @@
 
   <ion-list lines="full">
     <ion-list-header>
-      <ion-label>Users</ion-label>
-      <ion-button id="open-modal">Add User</ion-button>
+      <ion-grid>
+        <ion-row class="ion-justify-content-between">
+          <ion-col size="6">User</ion-col>
+          <ion-col>NFC ID</ion-col>
+          <ion-col>Balance</ion-col>
+        </ion-row>
+      </ion-grid>
+
     </ion-list-header>
     <div *ngIf="usersData$ | async as usersVm">
       <ion-item *ngFor="let user of usersVm.users">
-        <ion-label>{{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance}}</ion-label>
+        <ion-grid>
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="6">{{ user.name }} {{ user.surname }}</ion-col>
+            <ion-col>{{user.nfcId}}</ion-col>
+            <ion-col class="ion-text-right">{{user.balance.toFixed(2)}} €</ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-item>
     </div>
   </ion-list>
@@ -44,7 +59,7 @@
           </ion-item>
           <ion-item>
             <ion-label position="stacked">Name</ion-label>
-            <ion-input type="text"  [(ngModel)]="name"></ion-input>
+            <ion-input type="text" [(ngModel)]="name"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position="stacked">Surname</ion-label>
@@ -56,7 +71,7 @@
           </ion-item>
           <ion-item>
             <ion-label position="stacked">Top UP Amount</ion-label>
-            <ion-input type="number"  [(ngModel)]="balance"></ion-input>
+            <ion-input type="number" [(ngModel)]="balance"></ion-input>
           </ion-item>
         </div>
         <ion-row *ngIf="!nfcId" class="ion-align-items-center" style="height: 100%;">
