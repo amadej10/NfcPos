@@ -20,15 +20,13 @@
   <div *ngIf="user$ | async as userVm" class="vertical-container">
     <!-- <span *ngIf="userVm.user as user"> -->
 
-    <ion-item *ngIf="userVm.user as user">
-      <ion-grid>
-        <ion-row class="ion-justify-content-between">
-          <ion-col size="6">USER:<br>{{ user.name }} {{ user.surname }}</ion-col>
-          <ion-col class="ion-text-right">BALANCE:<br>{{user.balance.toFixed(2)}} €</ion-col>
-          <ion-col class="ion-text-right">TOTAL:<br>{{total.toFixed(2)}} €</ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-item>
+    <ion-grid *ngIf="userVm.user as user">
+      <ion-row class="ion-justify-content-between">
+        <ion-col size="6">USER:<br>{{ user.name }} {{ user.surname }}</ion-col>
+        <ion-col class="ion-text-right">BALANCE:<br>{{user.balance.toFixed(2)}} €</ion-col>
+        <ion-col class="ion-text-right">TOTAL:<br>{{total.toFixed(2)}} €</ion-col>
+      </ion-row>
+    </ion-grid>
     <!-- {{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance.toFixed(2)}} € -->
     <!-- </span> -->
     <div style="height: 80%;">
