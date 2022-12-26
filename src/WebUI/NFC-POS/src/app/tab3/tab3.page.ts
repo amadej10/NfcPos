@@ -29,8 +29,6 @@ export class Tab3Page {
       this.nfcId = nfcId;
       console.log(nfcId, this.nfcId)
       if (nfcId) {
-        this.presentToast("NFC tag scanned with id: " + nfcId);
-
         this.ngZone.run(() => {
           this.user$ = this.userClient.getUser(nfcId).pipe(tap(x => this.user = x));
         });
@@ -63,6 +61,10 @@ export class Tab3Page {
       this.nfcId = undefined;
       this.topUpAmount = undefined;
     });
+  }
+
+  cancel(){
+    this.initState();
   }
 
 
