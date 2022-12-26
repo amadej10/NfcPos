@@ -129,6 +129,8 @@ export class Tab2Page {
       this.counter[x.id] = 0;
     })
     this.total = 0;
+    this.nfcId = undefined;
+    this.user$ = undefined;
   }
 
   pay() {
@@ -138,7 +140,8 @@ export class Tab2Page {
     })).subscribe(result => {
       this.presentToast(`Paid:  ${this.total.toFixed(2)} € User new balance is: ${result.newBalance.toFixed(2)} €`, 'middle')
       this.initState();
-      this.nfcId = undefined;
+      
+
     },
       error => {
         console.log(error);
@@ -147,7 +150,6 @@ export class Tab2Page {
   }
   cancel(){
     this.initState()
-    this.nfcId = undefined;
   }
 
 }
