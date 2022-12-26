@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'si.skornsek.nfc-pos',
   appName: 'NFC-POS',
   webDir: 'www',
   bundledWebRuntime: false
