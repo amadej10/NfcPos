@@ -101,6 +101,8 @@ export class Tab2Page {
       this.total += this.counter[item.id] * item.price;
     })
 
+    this.total = Math.round(this.total * 100) / 100
+
     if (this.total > this.user.user.balance) {
       this.presentToast("Total is bigger than user balance :S");
 
@@ -117,7 +119,7 @@ export class Tab2Page {
   pay() {
     this.operationsClient.pay(new PayCommand({
       nfcId: this.nfcId,
-      totalPayAmount: this.total
+      totalPayAmount: Math.round(this.total * 100) / 100
     })).subscribe(result => {
       this.presentToast("Paid: " + this.total + " User has: " + result.newBalance)
       this.InitState();

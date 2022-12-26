@@ -25,7 +25,7 @@
         <ion-grid>
           <ion-row class="ion-justify-content-between">
             <ion-col>{{menuItem.name}}</ion-col>
-            <ion-col>{{menuItem.price}} €</ion-col>
+            <ion-col>{{menuItem.price.toFixed(2)}} €</ion-col>
             <ion-col>Items: {{counter[menuItem.id]}}</ion-col>
             <ion-col><ion-button size="large" expand="full" (click)="addItem(menuItem.id)">+</ion-button></ion-col>
             <ion-col><ion-button size="large" expand="full" (click)="subtractItem(menuItem.id)">-</ion-button></ion-col>
@@ -33,7 +33,7 @@
         </ion-grid>
       </ion-item>
     </ion-list>
-    TOTAL: {{total}} €
+    TOTAL: {{total.toFixed(2)}} €
     <ion-button size="large" expand="full" (click)="pay()">Pay</ion-button>
   </div>
 </ion-content>
