@@ -16,20 +16,17 @@
     </ion-col>
   </ion-row>
 
-  <div *ngIf="nfcId">
-    <div *ngIf="user$ | async as userVm">
-      <ion-grid *ngIf="userVm.user as user">
-        <ion-row class="ion-justify-content-between">
-          <ion-col size="6">USER:<br>{{ user.name }} {{ user.surname }}</ion-col>
-          <ion-col class="ion-text-right">BALANCE:<br>{{user.balance.toFixed(2)}} €</ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
+  <div *ngIf="user$ | async as userVm">
+    <ion-grid *ngIf="userVm.user as user">
+      <ion-row class="ion-justify-content-between">
+        <ion-col size="6">USER:<br>{{ user.name }} {{ user.surname }}</ion-col>
+        <ion-col class="ion-text-right">BALANCE:<br>{{user.balance.toFixed(2)}} €</ion-col>
+      </ion-row>
+    </ion-grid>
     <ion-item>
       <ion-label position="stacked">Top UP Amount</ion-label>
       <ion-input type="number" [(ngModel)]="topUpAmount"></ion-input>
     </ion-item>
     <ion-button size="large" expand="full" (click)="topUp()">Top Up</ion-button>
-
   </div>
 </ion-content>
