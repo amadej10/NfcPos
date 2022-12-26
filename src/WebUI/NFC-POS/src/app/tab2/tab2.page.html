@@ -14,12 +14,10 @@
     </ion-col>
   </ion-row>
 
-  <div *ngIf="nfcId">
-    <div *ngIf="user$ | async as userVm">
-      <span *ngIf="userVm.user as user">
-        {{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance}}
-      </span>
-    </div>
+  <div *ngIf="user$ | async as userVm">
+    <span *ngIf="userVm.user as user">
+      {{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance}}
+    </span>
     <ion-list>
       <ion-item *ngFor="let menuItem of menuItems">
         <ion-grid>
