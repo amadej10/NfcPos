@@ -50,8 +50,10 @@ export class Tab2Page {
     this.menuItems.push(new MenuItem(4, 2, "Water"));
     this.menuItems.push(new MenuItem(5, 3, "Juice"));
     this.menuItems.push(new MenuItem(6, 1.5, "Ice"));
+    this.menuItems.push(new MenuItem(7, 4.5, "Burger"));
 
-    this.InitState();
+
+    this.initState();
     console.log(this.counter);
 
 
@@ -122,7 +124,7 @@ export class Tab2Page {
     }
   }
 
-  InitState() {
+  initState() {
     this.menuItems.forEach(x => {
       this.counter[x.id] = 0;
     })
@@ -134,14 +136,18 @@ export class Tab2Page {
       nfcId: this.nfcId,
       totalPayAmount: Math.round(this.total * 100) / 100
     })).subscribe(result => {
-      this.presentToast("Paid: " + this.total + " User has: " + result.newBalance)
-      this.InitState();
+      this.presentToast(`Paid:  ${this.total.toFixed(2)} € User new balance is: ${result.newBalance.toFixed(2)} €`, 'middle')
+      this.initState();
       this.nfcId = undefined;
     },
       error => {
         console.log(error);
         this.presentToast("User can't pay. Balance is to low :S")
       })
+  }
+  cancel(){
+    this.initState()
+    this.nfcId = undefined;
   }
 
 }

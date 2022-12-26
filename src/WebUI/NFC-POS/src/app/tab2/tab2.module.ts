@@ -7,6 +7,8 @@ import { Tab2Page } from './tab2.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { Tab2PageRoutingModule } from './tab2-routing.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
 
 @NgModule({
   imports: [
@@ -14,7 +16,8 @@ import { Tab2PageRoutingModule } from './tab2-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab2PageRoutingModule
+    Tab2PageRoutingModule,
+    ScrollingModule
   ],
   declarations: [Tab2Page]
 })

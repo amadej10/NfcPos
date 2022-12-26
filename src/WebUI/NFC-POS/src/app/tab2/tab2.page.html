@@ -3,10 +3,13 @@
     <ion-title>
       NFC
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="nfcId" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="container">
   <!-- <ion-button (click)="getNfcId()">Get NFC</ion-button> -->
   <ion-row *ngIf="!nfcId" class="ion-align-items-center" style="height: 100%;">
     <ion-col>
@@ -14,24 +17,39 @@
     </ion-col>
   </ion-row>
 
-  <div *ngIf="user$ | async as userVm">
-    <span *ngIf="userVm.user as user">
-      {{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance}}
-    </span>
-    <ion-list>
-      <ion-item *ngFor="let menuItem of menuItems">
-        <ion-grid>
-          <ion-row class="ion-justify-content-between">
-            <ion-col>{{menuItem.name}}</ion-col>
-            <ion-col>{{menuItem.price.toFixed(2)}} €</ion-col>
-            <ion-col>Items: {{counter[menuItem.id]}}</ion-col>
-            <ion-col><ion-button size="large" expand="full" (click)="addItem(menuItem.id)">+</ion-button></ion-col>
-            <ion-col><ion-button size="large" expand="full" (click)="subtractItem(menuItem.id)">-</ion-button></ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-list>
-    TOTAL: {{total.toFixed(2)}} €
+  <div *ngIf="user$ | async as userVm" class="vertical-container">
+    <!-- <span *ngIf="userVm.user as user"> -->
+
+    <ion-item *ngIf="userVm.user as user">
+      <ion-grid>
+        <ion-row class="ion-justify-content-between">
+          <ion-col size="6">USER:<br>{{ user.name }} {{ user.surname }}</ion-col>
+          <ion-col class="ion-text-right">BALANCE:<br>{{user.balance.toFixed(2)}} €</ion-col>
+          <ion-col class="ion-text-right">TOTAL:<br>{{total.toFixed(2)}} €</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <!-- {{ user.name }} {{ user.surname }} | {{user.nfcId}} | {{user.balance.toFixed(2)}} € -->
+    <!-- </span> -->
+    <div style="height: 80%;">
+
+      <cdk-virtual-scroll-viewport itemSize="menuItems.length" class="ion-content-scroll-host">
+        <ion-list>
+          <ion-item *ngFor="let menuItem of menuItems">
+            <ion-grid>
+              <ion-row class="ion-justify-content-between">
+                <ion-col>{{menuItem.name}}</ion-col>
+                <ion-col>{{menuItem.price.toFixed(2)}} €</ion-col>
+                <ion-col>Items: {{counter[menuItem.id]}}</ion-col>
+                <ion-col><ion-button size="large" expand="full" (click)="addItem(menuItem.id)">+</ion-button></ion-col>
+                <ion-col><ion-button size="large" expand="full"
+                    (click)="subtractItem(menuItem.id)">-</ion-button></ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </cdk-virtual-scroll-viewport>
+    </div>
     <ion-button size="large" expand="full" (click)="pay()">Pay</ion-button>
   </div>
 </ion-content>
